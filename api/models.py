@@ -6,3 +6,7 @@ class Photo(models.Model):
     image_path = models.TextField()
     created_at = models.DateTimeField()
     modified_at = models.DateTimeField()
+    owner = models.ForeignKey('auth.User', related_name='photos', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('-created_at',)
