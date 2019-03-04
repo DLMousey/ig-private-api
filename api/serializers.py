@@ -1,15 +1,13 @@
-from rest_framework import serializers
 import datetime
-
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from . import models
 
 
-class PhotoSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    description = serializers.CharField(required=True, allow_blank=True)
-    image_path = serializers.CharField(required=True)
-    created_at = serializers.DateTimeField()
-    modified_at = serializers.DateTimeField()
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Photo
+        fields = ('description', 'image_path', 'created_at', 'modified_at', 'owner')
 
     def create(self, data):
         return models.Photo.objects.create(**data)
@@ -21,3 +19,17 @@ class PhotoSerializer(serializers.Serializer):
 
         instance.save()
         return instance
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'email', 'id')
+
+
+class PhotoLikeSerializer(serializers.ModelSerializer):
+    liked_by = UserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.PhotoLike
+        fields = ('created_at', 'liked_by', 'photo')
