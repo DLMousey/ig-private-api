@@ -10,7 +10,7 @@ class SystemUser(AbstractUser):
 
 class Photo(models.Model):
     description = models.TextField()
-    image_path = models.TextField()
+    image_path = models.ImageField(upload_to='media')
     created_at = models.DateTimeField()
     modified_at = models.DateTimeField()
     owner = models.ForeignKey(SystemUser, on_delete=models.CASCADE, default=None)

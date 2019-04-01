@@ -5,6 +5,8 @@ from . import models
 
 
 class PhotoSerializer(serializers.ModelSerializer):
+    image_path = serializers.ImageField(max_length=None, use_url=True, allow_null=True, required=False)
+
     class Meta:
         model = models.Photo
         fields = ('description', 'image_path', 'created_at', 'modified_at', 'owner')
